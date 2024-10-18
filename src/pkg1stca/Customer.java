@@ -22,36 +22,46 @@ import java.util.List;
 import java.util.regex.Pattern;
  
 public class Customer {
+    //Fields to store customer information. 
     private String firstName;
     private double totalPurchased;
     private int customerClass;
     private int lastPurchase;
-    // Getters and setters
+    
+    // Getters for firstname
     public String getFirstName() {
         return firstName;
     }
+    //Setter for firstname
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+      // Getter for totalPurchased
     public double getTotalPurchased() {
         return totalPurchased;
     }
+     // Setter for totalPurchased
     public void setTotalPurchased(double totalPurchased) {
         this.totalPurchased = totalPurchased;
     }
+    // Getter for customerClass
     public int getCustomerClass() {
         return customerClass;
     }
+    // Setter for customerClass
     public void setCustomerClass(int customerClass) {
         this.customerClass = customerClass;
     }
+     // Getter for lastPurchase
     public int getLastPurchase() {
         return lastPurchase;
     }
+    // Setter for lastPurchase
     public void setLastPurchase(int lastPurchase) {
         this.lastPurchase = lastPurchase;
     }
 }
+// Variables for reading the input file and tracking customer data
  class Program {
     private String line;
     private int lineCount = 0;
@@ -59,12 +69,14 @@ public class Customer {
     private BufferedReader reader = null;
     private final List<String> errorMessages = new ArrayList<>();
     
+     // Constructor that initializes the BufferedReader to read from a file
     public Program() throws FileNotFoundException {
  
         this.reader = new BufferedReader(new FileReader("/Users/colmj/Downloads/customers (1).txt"));
 
     }
    
+     // Method to process the file and create Customer objects
     public void run() throws FileNotFoundException {
          this.reader = new BufferedReader(new FileReader("/Users/colmj/Downloads/customers (1).txt"));
         Customer customer = new Customer();
@@ -75,7 +87,7 @@ public class Customer {
                 names = line.split(" ");
 System.out.println(line);
                
-            
+            // Switch statement to process each line based on its order
                 switch (lineCount) {
                     
                     case 0 -> {
@@ -87,7 +99,7 @@ System.out.println(line);
                         }
                     }
 
-
+ // Parse and set total purchased amount
                     case 1 -> {
                         try {
                             customer.setTotalPurchased(Double.parseDouble(line));
@@ -96,10 +108,12 @@ System.out.println(line);
                             outputError(line, "Total Purchased");
                         }
                     }
+                      // Parse and set customer class
                     case 2 -> {
                         customer.setCustomerClass(Integer.parseInt(line));
                         lineCount++;
                     }
+                    // Parse and set last purchase year, then add customer to the list
                     case 3 -> {
                         customer.setLastPurchase(Integer.parseInt(line));
                         lineCount = 0;
@@ -108,6 +122,7 @@ System.out.println(line);
                     }
                 }
             }
+            // Catch and store any IO exceptions that occur while reading the file 
         } catch (IOException e) {
             errorMessages.add(e.getMessage());
         } finally { 
@@ -120,12 +135,15 @@ System.out.println(line);
                 errorMessages.add(e.getMessage());
             }
         }
+        // Write discount information to an output file
         writeDiscountsToFile();
         printErrorMessages();
     }
+    // Method to write customer discounts to a file based on specific criteria
     private void writeDiscountsToFile() {
         String file = "customerDiscounts.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            // Loop through customers and determine discount based on class and last purchase
             for (Customer c : customers) {
                 if (c.getCustomerClass() == 1 && c.getLastPurchase() == 2024) {
                     String value = getDiscountTotal(c.getFirstName(), c.getTotalPurchased(), 30);
@@ -139,16 +157,19 @@ System.out.println(line);
             errorMessages.add(e.getMessage());
         }
     }
+    // Method to log and display error messages
     private void outputError(String value, String type) {
         String errorMessage = "Invalid File: " + value + " Not Valid for " + type;
         System.out.println(errorMessage);
         errorMessages.add(errorMessage);
     }
+       // Method to calculate and return the discounted total price for a customer
     private String getDiscountTotal(String firstName, double totalPurchased, int discountPercentage) {
         double discountAmount = totalPurchased / 100 * discountPercentage;
         double discountedTotal = totalPurchased - discountAmount;
         return firstName + " Total Price: " + discountedTotal + "\n";
     }
+    // Method to print all error messages stored during processing
     private void printErrorMessages() {
         if (!errorMessages.isEmpty()) {
             System.out.println("Errors encountered during processing:");
@@ -157,31 +178,22 @@ System.out.println(line);
             }
         }
     }
+     // Method to find a specific file in a given directory
     public static String findFile(String directory, String fileName) {
         File dir = new File(directory);
         File[] files = dir.listFiles((d, name) -> name.equals(fileName));
         if (files != null && files.length > 0) {
             return files[0].getAbsolutePath();
         }
-        return null;
+        return null;// Return null if file not found
     }
+     // Main method to execute the program
     public static void main(String[] args) throws FileNotFoundException {
-        // small adjustment to receive path  and filename through args
-        // u call it by java program <path> <file>
-        // arg0 C:/Users/valter/Documents/CCT/Java/001_CCT/src
-        // arg1 fileQuestion22.txt
-System.out.println("Hello");
-
-        //if (args.length < 2) {
-           // System.out.println("Usage: java Program <file-path>");
-            //return;//
-            
-        //}
  
          try {
-             String filePath = "";
+             String filePath = "/Users/colmj/Downloads/customers (1).txt";
            // String filePath = findFile( args[0], args[1]); // You can change the directory as needed
-           System.out.println("Hello1");
+           
             if (filePath != null) {
                 Program program = new Program();
                 program.run();
