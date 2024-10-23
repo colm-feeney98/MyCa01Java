@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+//https://github.com/colm-feeney98/MyCa01Java/tree/master 
+
 public class Customer {
 
     //Fields to store customer information. 
