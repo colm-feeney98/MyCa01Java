@@ -20,76 +20,86 @@ import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
- 
+
 public class Customer {
+
     //Fields to store customer information. 
     private String firstName;
     private double totalPurchased;
     private int customerClass;
     private int lastPurchase;
-    
+
     // Getters for firstname
     public String getFirstName() {
         return firstName;
     }
+
     //Setter for firstname
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-      // Getter for totalPurchased
+    // Getter for totalPurchased
+
     public double getTotalPurchased() {
         return totalPurchased;
     }
-     // Setter for totalPurchased
+    // Setter for totalPurchased
+
     public void setTotalPurchased(double totalPurchased) {
         this.totalPurchased = totalPurchased;
     }
+
     // Getter for customerClass
     public int getCustomerClass() {
         return customerClass;
     }
+
     // Setter for customerClass
     public void setCustomerClass(int customerClass) {
         this.customerClass = customerClass;
     }
-     // Getter for lastPurchase
+    // Getter for lastPurchase
+
     public int getLastPurchase() {
         return lastPurchase;
     }
+
     // Setter for lastPurchase
     public void setLastPurchase(int lastPurchase) {
         this.lastPurchase = lastPurchase;
     }
 }
 // Variables for reading the input file and tracking customer data
- class Program {
+
+class Program {
+
     private String line;
     private int lineCount = 0;
     private final List<Customer> customers = new ArrayList<>();
     private BufferedReader reader = null;
     private final List<String> errorMessages = new ArrayList<>();
-    
-     // Constructor that initializes the BufferedReader to read from a file
+
+    // Constructor that initializes the BufferedReader to read from a file
     public Program() throws FileNotFoundException {
- 
+
         this.reader = new BufferedReader(new FileReader("/Users/colmj/Downloads/customers (1).txt"));
 
     }
-   
-     // Method to process the file and create Customer objects
+
+    // Method to process the file and create Customer objects
     public void run() throws FileNotFoundException {
-         this.reader = new BufferedReader(new FileReader("/Users/colmj/Downloads/customers (1).txt"));
+        this.reader = new BufferedReader(new FileReader("/Users/colmj/Downloads/customers (1).txt"));
         Customer customer = new Customer();
         String[] names;
         try {
             while ((line = reader.readLine()) != null) {
-            
+
                 names = line.split(" ");
-System.out.println(line);
-               
-            // Switch statement to process each line based on its order
+                System.out.println(line);
+
+                // Switch statement to process each line based on its order
                 switch (lineCount) {
-                    
+
                     case 0 -> {
                         if (names[0].matches("^[a-zA-Z\\s]+$|^$")) {
                             customer.setFirstName(line);
@@ -99,7 +109,7 @@ System.out.println(line);
                         }
                     }
 
- // Parse and set total purchased amount
+                    // Parse and set total purchased amount
                     case 1 -> {
                         try {
                             customer.setTotalPurchased(Double.parseDouble(line));
@@ -108,7 +118,7 @@ System.out.println(line);
                             outputError(line, "Total Purchased");
                         }
                     }
-                      // Parse and set customer class
+                    // Parse and set customer class
                     case 2 -> {
                         customer.setCustomerClass(Integer.parseInt(line));
                         lineCount++;
@@ -125,11 +135,9 @@ System.out.println(line);
             // Catch and store any IO exceptions that occur while reading the file 
         } catch (IOException e) {
             errorMessages.add(e.getMessage());
-        } finally { 
+        } finally {
             try {
-               for (Customer c : customers) {
-  System.out.println(c.getFirstName());
-}
+             
                 reader.close();
             } catch (IOException e) {
                 errorMessages.add(e.getMessage());
@@ -139,6 +147,7 @@ System.out.println(line);
         writeDiscountsToFile();
         printErrorMessages();
     }
+
     // Method to write customer discounts to a file based on specific criteria
     private void writeDiscountsToFile() {
         String file = "customerDiscounts.txt";
@@ -157,18 +166,21 @@ System.out.println(line);
             errorMessages.add(e.getMessage());
         }
     }
+
     // Method to log and display error messages
     private void outputError(String value, String type) {
         String errorMessage = "Invalid File: " + value + " Not Valid for " + type;
         System.out.println(errorMessage);
         errorMessages.add(errorMessage);
     }
-       // Method to calculate and return the discounted total price for a customer
+    // Method to calculate and return the discounted total price for a customer
+
     private String getDiscountTotal(String firstName, double totalPurchased, int discountPercentage) {
         double discountAmount = totalPurchased / 100 * discountPercentage;
         double discountedTotal = totalPurchased - discountAmount;
         return firstName + " Total Price: " + discountedTotal + "\n";
     }
+
     // Method to print all error messages stored during processing
     private void printErrorMessages() {
         if (!errorMessages.isEmpty()) {
@@ -178,7 +190,8 @@ System.out.println(line);
             }
         }
     }
-     // Method to find a specific file in a given directory
+    // Method to find a specific file in a given directory
+
     public static String findFile(String directory, String fileName) {
         File dir = new File(directory);
         File[] files = dir.listFiles((d, name) -> name.equals(fileName));
@@ -187,13 +200,14 @@ System.out.println(line);
         }
         return null;// Return null if file not found
     }
-     // Main method to execute the program
+    // Main method to execute the program
+
     public static void main(String[] args) throws FileNotFoundException {
- 
-         try {
-             String filePath = "/Users/colmj/Downloads/customers (1).txt";
-           // String filePath = findFile( args[0], args[1]); // You can change the directory as needed
-           
+
+        try {
+            String filePath = "/Users/colmj/Downloads/customers (1).txt";
+            // String filePath = findFile( args[0], args[1]); // You can change the directory as needed
+
             if (filePath != null) {
                 Program program = new Program();
                 program.run();
