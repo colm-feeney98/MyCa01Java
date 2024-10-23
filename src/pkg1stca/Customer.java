@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.System.Logger;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -95,7 +96,7 @@ class Program {
             while ((line = reader.readLine()) != null) {
 
                 names = line.split(" ");
-                System.out.println(line);
+               // System.out.println(line);
 
                 // Switch statement to process each line based on its order
                 switch (lineCount) {
@@ -144,34 +145,67 @@ class Program {
             }
         }
         // Write discount information to an output file
-        writeDiscountsToFile();
+        Outputdiscount();
         printErrorMessages();
     }
 
     // Method to write customer discounts to a file based on specific criteria
-    private void writeDiscountsToFile() {
-        String file = "customerDiscounts.txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            // Loop through customers and determine discount based on class and last purchase
+    private void Outputdiscount() {
+        
             for (Customer c : customers) {
                 if (c.getCustomerClass() == 1 && c.getLastPurchase() == 2024) {
                     String value = getDiscountTotal(c.getFirstName(), c.getTotalPurchased(), 30);
-                    writer.write(value);
+                      System.out.println(value);
+                   
                 } else if (c.getCustomerClass() == 1 && c.getLastPurchase() < 2024) {
                     String value = getDiscountTotal(c.getFirstName(), c.getTotalPurchased(), 20);
-                    writer.write(value);
+                    System.out.println(value);
+                   // writer.write(value);
                 }
+                
+                 else if (c.getCustomerClass() == 1 && ( c.getLastPurchase() < (Year.now().getValue () -5 ) )) {
+                    String value = getDiscountTotal(c.getFirstName(), c.getTotalPurchased(), 10);
+                    System.out.println(value);
+                   
+               }
+                
+                else if (c.getCustomerClass() == 2 && c.getLastPurchase() == 2024) {
+                    String value = getDiscountTotal(c.getFirstName(), c.getTotalPurchased(), 15);
+                      System.out.println(value);
+                   
+                } else if (c.getCustomerClass() == 2 && c.getLastPurchase() < 2024) {
+                    String value = getDiscountTotal(c.getFirstName(), c.getTotalPurchased(), 13);
+                    System.out.println(value);
+                  
+                }
+                
+                 else if (c.getCustomerClass() == 2 && ( c.getLastPurchase() < (Year.now().getValue () -5 ) )) {
+                    String value = getDiscountTotal(c.getFirstName(), c.getTotalPurchased(), 5);
+                    System.out.println(value);
+}
+                    
+                 else if (c.getCustomerClass() == 3 && c.getLastPurchase() == 2024) {
+                    String value = getDiscountTotal(c.getFirstName(), c.getTotalPurchased(), 3);
+                      System.out.println(value);
+                   
+                } 
+                    else if (c.getCustomerClass() == 3 && c.getLastPurchase() < 2024) {
+                    String value = getDiscountTotal(c.getFirstName(), c.getTotalPurchased(), 0);
+                    System.out.println(value);
+                   // writer.write(value);
+                }
+                
             }
-        } catch (IOException e) {
-            errorMessages.add(e.getMessage());
-        }
-    }
+            
+            } 
+       
+    
 
     // Method to log and display error messages
     private void outputError(String value, String type) {
         String errorMessage = "Invalid File: " + value + " Not Valid for " + type;
         System.out.println(errorMessage);
-        errorMessages.add(errorMessage);
+       // errorMessages.add(errorMessage);
     }
     // Method to calculate and return the discounted total price for a customer
 
